@@ -1,10 +1,7 @@
 const axios = require('axios');
 
-// Reemplaza 'usuario' y 'contraseña' con tus credenciales reales
 const username = 'intecfull';
 const password = 'intecfullpassword';
-
-// Codifica las credenciales en base64
 const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
 
 const socketConnection = (io) => {
@@ -12,13 +9,12 @@ const socketConnection = (io) => {
     console.log("User connected", socket.id);
 
     socket.on("join_room", (data) => {
-      console.log(`User with id ${socket.id} is sending requests`);
+      console.log(`User with id ${socket.id} is sending requests with action ${data.action}`);
 
       const postData = {
-        action: "forward",
+        action: data.action, // Usar la acción recibida del cliente
       };
 
-      // Añade el encabezado de autorización a tu petición
       axios.post('http://10.14.0.165:1880/endpoint/api/robot/control', postData, {
         headers: {
           'Authorization': `Basic ${base64Credentials}`
